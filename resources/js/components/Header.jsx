@@ -1,15 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, Sun, MoonStar, X } from 'lucide-react';
 
 export default function Header() {
     const [mobileOpen, setMobileOpen] = useState(false);
+    const [theme, setTheme] = useState('dark');
     const navLinks = [
         { label: 'Yo', href: '/' },
         { label: 'Proyectos', href: '/projects' },
         { label: 'Blog', href: '/blog' },
         { label: 'Contacto', href: '/contact' },
     ];
+
+    useEffect(() => {
+        const stored = localStorage.getItem('theme');
+        if (stored === 'light' || stored === 'dark') {
+            setTheme(stored);
+        }
+    }, []);
+
+    useEffect(() => {
+        const isLight = theme === 'light';
+        document.body.classList.toggle('light-mode', isLight);
+        document.body.classList.toggle('dark-mode', !isLight);
+        document.documentElement.style.colorScheme = isLight ? 'light' : 'dark';
+        localStorage.setItem('theme', theme);
+    }, [theme]);
+
+    const toggleTheme = () => setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
 
     const handleNavClick = () => setMobileOpen(false);
 
@@ -38,6 +56,14 @@ export default function Header() {
                                 {link.label}
                             </Link>
                         ))}
+                        <button
+                            type="button"
+                            onClick={toggleTheme}
+                            className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/10 p-2 text-indigo-50 transition-all hover:-translate-y-0.5 hover:border-indigo-200 hover:text-white"
+                            aria-label="Cambiar tema"
+                        >
+                            {theme === 'light' ? <MoonStar className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+                        </button>
                         <Link
                             to="/contact"
                             onClick={handleNavClick}
@@ -78,6 +104,17 @@ export default function Header() {
                             >
                                 Contacto
                             </Link>
+                            <button
+                                type="button"
+                                onClick={() => {
+                                    toggleTheme();
+                                    handleNavClick();
+                                }}
+                                className="inline-flex items-center justify-center rounded-full border border-white/15 bg-white/10 px-3 py-2 text-sm font-semibold text-indigo-100 transition-all hover:-translate-y-0.5 hover:border-indigo-200 hover:text-white"
+                                aria-label="Cambiar tema"
+                            >
+                                {theme === 'light' ? 'Modo noche' : 'Modo dia'}
+                            </button>
                         </div>
                     </div>
                 </div>

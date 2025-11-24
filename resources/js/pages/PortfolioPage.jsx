@@ -6,6 +6,7 @@ import Home from './Home';
 import ProjectsPage from './ProjectsPage';
 import BlogPage from './BlogPage';
 import ContactPage from './ContactPage';
+import FloatingWhatsApp from '../components/FloatingWhatsApp';
 
 export default function PortfolioPage() {
     const location = useLocation();
@@ -49,6 +50,7 @@ export default function PortfolioPage() {
             </main>
 
             <Footer />
+            <FloatingWhatsApp />
         </div>
     );
 }
